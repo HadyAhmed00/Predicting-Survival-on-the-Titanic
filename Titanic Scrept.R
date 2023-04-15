@@ -1,4 +1,5 @@
-setwd("F:/University/4th year/2ed Semester/Distributed Computing/Assg/Lab Assignemnt/Titanic Disaster")
+setwd("C:/Users/Hady Ahmed (Main)/Documents/GitHub/Predicting-Survival-on-the-Titanic/Data")
+saveing_dir = "C:/Users/Hady Ahmed (Main)/Documents/GitHub/Predicting-Survival-on-the-Titanic/Addetional files"
 test_data <- read.table("test.csv", sep=",", header=TRUE)
 train_data <- read.table("train.csv", sep=",", header=TRUE) 
 real_test_labes <- read.table("submission.csv", sep=",", header=TRUE)
@@ -10,7 +11,7 @@ real_test_labes <- read.table("submission.csv", sep=",", header=TRUE)
 survival_count <- table(train_data$Survived)
 # Create a bar plot of passenger survival
 barplot(survival_count, main="Passenger Survival",
-        xlab="Survived", ylab="Count", col=c("red", "green"), 
+        xlab="Survived", ylab="Count", col=c("#FF5733", "#5F9EA0"), 
         legend=c("No", "Yes"))
 
 
@@ -23,8 +24,8 @@ plot(density(train_data$Fare), main="Passenger Fare", xlab="Fare", ylab="Density
 
 # Create a scatter plot of passenger age and fare
 plot(train_data$Age, train_data$Fare, main="Age vs. Fare",
-     xlab="Age", ylab="Fare", col=c("red", "green")[train_data$Survived+1])
-legend("topright", legend=c("No", "Yes"), col=c("red", "green"), pch=1)
+     xlab="Age", ylab="Fare", col=c("#FF5733", "#5F9EA0")[train_data$Survived+1])
+legend("topright", legend=c("No", "Yes"), col=c("#FF5733", "#5F9EA0"), pch=1)
 
 
 # Create a table of passenger class and survival
@@ -32,9 +33,43 @@ class_survival_count <- table(train_data$Pclass, train_data$Survived)
 
 # Create a stacked bar plot of passenger class and survival
 barplot(class_survival_count, main="Passenger Class and Survival",
-        xlab="Class", ylab="Count", col=c("red", "green"), legend=c("No", "Yes"), beside=TRUE)
+        xlab="Class", ylab="Count", col=c("#FF5733", "#5F9EA0"), legend=c("No", "Yes"), beside=TRUE)
 
 
+#install.packages("ggplot2")
+# install.packages("colorspace")
+library(colorspace)
+library(ggplot2)
+# Bar plot for categorical variables: For variables like "Sex" and "Embarked", you can create a bar plot to see the proportion of survivors for each category. Here's an example code for the "Sex" variable
+ggplot(data = train_data, aes(x = Sex, fill = factor(Survived))) + 
+  geom_bar(position = "dodge") + 
+  scale_fill_manual(values = c("#FF5733", "#5F9EA0"), 
+                    name = "Survived", 
+                    labels = c("No", "Yes")) + 
+  labs(x = "Sex", y = "Count", title = "Survival by Sex")
+
+# Histogram for continuous variables: For variables like "Age" and "Fare", you can create a histogram to see the distribution of survivors and non-survivors. Here's an example code for the "Age" variable:
+ggplot(data = train_data, aes(x = Age, fill = factor(Survived))) + 
+  geom_histogram(position = "dodge", bins = 30, alpha = 0.5) + 
+  scale_fill_manual(values = c("#FF5733", "#5F9EA0"), 
+                    name = "Survived", 
+                    labels = c("No", "Yes")) + 
+  labs(x = "Age", y = "Count", title = "Survival by Age")
+
+# Box plot for continuous variables and categorical variables: For variables like "Pclass" and "Embarked", you can create a box plot to see the distribution of survivors and non-survivors for each category. Here's an example code for the "Pclass" variable
+ggplot(data = train_data, aes(x = factor(Pclass), y = Age, fill = factor(Survived))) + 
+  geom_boxplot(alpha = 0.5) + 
+  scale_fill_manual(values = c("#FF5733", "#5F9EA0"), 
+                    name = "Survived", 
+                    labels = c("No", "Yes")) + 
+  labs(x = "Pclass", y = "Age", title = "Survival by Pclass and Age")
+
+ggplot(data = train_data, aes(x = Fare, fill = factor(Survived))) + 
+  geom_histogram(position = "dodge", bins = 30, alpha = 0.5) + 
+  scale_fill_manual(values = c("#FF5733", "#5F9EA0"), 
+                    name = "Survived", 
+                    labels = c("No", "Yes")) + 
+  labs(x = "Fare", y = "Count", title = "Survival by Fare")
 
 ##############################################################
 # preProcssing based on the data Exploration and visualizatin
